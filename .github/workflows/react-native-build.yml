@@ -65,6 +65,9 @@ jobs:
         run: |
           echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
 
+      - name: Check keystore file
+        run: ls -lh android/app/release.keystore
+
       # Setup keystore.properties for Release Build
       - name: Setup keystore properties
         if: ${{ github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both' }}
