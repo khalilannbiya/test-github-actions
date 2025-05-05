@@ -72,10 +72,10 @@ jobs:
       - name: Setup keystore properties
         if: ${{ github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both' }}
         run: |
-          echo "storeFile=release.keystore" > android/keystore.properties
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/keystore.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/keystore.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/keystore.properties
+          echo "storeFile=android/app/release.keystore" > keystore.properties
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> keystore.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> keystore.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> keystore.properties
 
       # Build Debug APK
       - name: Build Debug APK
@@ -83,6 +83,12 @@ jobs:
         run: |
           cd android
           ./gradlew assembleDebug --no-daemon
+
+      - name: Clean Build Folder
+        if: ${{ github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both' }}
+        run: |
+          cd android
+          ./gradlew clean
 
       # Build Release APK
       - name: Build Release APK
